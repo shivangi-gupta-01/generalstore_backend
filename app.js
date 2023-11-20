@@ -10,7 +10,7 @@ var usersRouter = require('./routes/users');
 var stateCityRouter = require('./routes/statecity');
 var companyRouter = require('./routes/company');
 var categoryRouter = require('./routes/category')
-
+var productRouter = require('./routes/product')
 var app = express();
 
 // view engine setup
@@ -28,6 +28,7 @@ app.use('/users', usersRouter);
 app.use('/statecity', stateCityRouter);
 app.use('/company', companyRouter);
 app.use('/category',categoryRouter)
+app.use('/product',productRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
