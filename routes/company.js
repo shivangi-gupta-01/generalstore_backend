@@ -44,6 +44,7 @@ router.post('/edit_company_data', function (req, res, next) {
 
 
 router.post('/edit_company_logo', upload.single('logo'), function (req, res, next) {
+  console.log(req.file)
   pool.query("update company set logo=? where companyid=?", [req.file.originalname, req.body.companyid], function (error, result) {
     if (error) {
       console.log(error)
@@ -69,14 +70,21 @@ router.post('/delete_company_data', function (req, res, next) {
 });
 
 
-router.get('/chk_company_login',function(req,res,next){
-  pool.query("select * from company where (emailaddress=? or mobilenumber=?) and password=? and status='Verified'",[req.body.emailaddress,req.body.mobilenumber,req.body.password],function(error,result){
+router.post('/chk_company_login', function (req, res, next) {
+  console.log(req.body)
+  pool.query("select * from company where (emailaddress=? or mobilenumber=?) and password=? and status='Verified'", [req.body.emailaddress, req.body.emailaddress, req.body.password,req.body.status], function (error, result) {
+    
     if (error) {
       console.log(error)
       return res.status(200).json({ status: false, message: 'Server Error' })
     }
     else {
-      return res.status(200).json({ status: true, message: 'Company Deleted:)' })
+      if (result.length == 0) {
+        return res.status(200).json({ status: false, message: 'Invalid email address/mobile number/password' })
+      }
+      else {
+        return res.status(200).json({ status: true, message: 'Valid Login' })
+      }
     }
   })
 })
